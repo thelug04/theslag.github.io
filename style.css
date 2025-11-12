@@ -46,3 +46,13 @@ h1 {
   background: #1db954;
   color: #000;
 }
+.gif-derecha {
+  position: fixed;      
+  right: 0;            
+  bottom: 0;           
+  height: 100vh;        
+  width: auto;         
+  object-fit: contain;
+  z-index: 1;         
+  pointer-events: none;
+}
