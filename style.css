@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #111, #000);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
+
+.container {
+  z-index: 2;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0.2rem;
+}
+
+.tagline {
+  color: #aaa;
+  margin-bottom: 1.5rem;
+}
+
+.links a {
+  display: block;
+  margin: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+
+.links a:hover {
+  background: #1db954;
+  color: #000;
+}
