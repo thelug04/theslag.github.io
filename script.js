@@ -2,7 +2,6 @@ const micLayer = document.querySelector('.mic-layer');
 const micCable = document.querySelector('.mic-cable');
 const mic = document.querySelector('.mic');
 
-
 let angle = 0;          
 let angVel = 0;      
 let angAcc = 0;     
@@ -18,7 +17,6 @@ const maxRope = 440;
 let isDragging = false;
 
 const PIXEL = 4;
-
 
 function getAnchor() {
   return {
@@ -67,7 +65,7 @@ function render() {
 
   mic.style.transform = `translate(${micTx}px, ${micTy}px)`;
 
-  micCable.innerHTML = ''; 
+  micCable.innerHTML = '';
 
   const dx = micX - ax;
   const dy = micY - ay;
@@ -111,23 +109,40 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
+function getPointFromEvent(e) {
+  if (e.touches && e.touches.length > 0) {
+    return {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    };
+  } else if (e.changedTouches && e.changedTouches.length > 0) {
+    return {
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY
+    };
+  } else {
+    return {
+      x: e.clientX,
+      y: e.clientY
+    };
+  }
+}
 
-mic.addEventListener('dragstart', (e) => e.preventDefault());
-
-mic.addEventListener('mousedown', (e) => {
+function startDrag(e) {
   if (parseFloat(mic.style.opacity) < 0.05) return;
   e.preventDefault();
   isDragging = true;
   mic.style.cursor = 'grabbing';
-});
+}
 
-window.addEventListener('mousemove', (e) => {
+function moveDrag(e) {
   if (!isDragging) return;
 
+  const point = getPointFromEvent(e);
   const anchor = getAnchor();
 
-  const dx = e.clientX - anchor.x;
-  const dy = e.clientY - anchor.y;
+  const dx = point.x - anchor.x;
+  const dy = point.y - anchor.y;
 
   const dist = Math.sqrt(dx * dx + dy * dy);
   ropeLength = Math.max(minRope, Math.min(dist, maxRope));
@@ -136,13 +151,25 @@ window.addEventListener('mousemove', (e) => {
   angVel = 0;
 
   render();
-});
+}
 
-window.addEventListener('mouseup', () => {
+function endDrag() {
   if (!isDragging) return;
   isDragging = false;
   mic.style.cursor = 'grab';
-});
+}
+
+mic.addEventListener('dragstart', (e) => e.preventDefault());
+
+mic.addEventListener('mousedown', startDrag);
+mic.addEventListener('touchstart', startDrag, { passive: false });
+
+window.addEventListener('mousemove', moveDrag);
+window.addEventListener('touchmove', moveDrag, { passive: false });
+
+window.addEventListener('mouseup', endDrag);
+window.addEventListener('touchend', endDrag);
+window.addEventListener('touchcancel', endDrag);
 
 window.addEventListener('resize', () => {
   render();
