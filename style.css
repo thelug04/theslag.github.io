@@ -3,6 +3,7 @@ body {
   background: #ffffff;
   color: #000000;
   font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
 .page {
@@ -21,6 +22,7 @@ body {
 
 .logo {
   width: 500px;
+  max-width: 90vw;
   height: auto;
   margin-bottom: 1rem;
 }
@@ -50,7 +52,7 @@ body {
 
 .chars {
   margin-top: 3rem;
-  max-width: 500px;
+  max-width: 90vw;
   height: auto;
 }
 
@@ -86,6 +88,7 @@ body {
 .mic {
   position: fixed;
   width: 120px;
+  max-width: 30vw;
   height: auto;
   pointer-events: auto;    
   cursor: grab;
@@ -94,4 +97,22 @@ body {
   z-index: 10;
   opacity: 0;     
   image-rendering: pixelated;
+}
+@media (max-width: 768px) {
+  .page {
+    padding-top: 60px;
+  }
+
+  .logo {
+    width: 80vw;
+  }
+
+  .links a {
+    width: 80vw;
+    max-width: 320px;
+  }
+
+  .chars {
+    max-width: 80vw;
+  }
 }
