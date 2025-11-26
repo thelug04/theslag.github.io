@@ -1,48 +1,97 @@
-/* Fondo blanco y centrado total */
 body {
   margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: #ffffff;
   color: #000000;
   font-family: 'Poppins', sans-serif;
 }
 
-/* Contenedor centrado */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+}
+
 .container {
   text-align: center;
+  z-index: 1;
 }
 
-/* Título */
-h1 {
-  font-size: 3rem;
-  margin-bottom: 0.3rem;
+.logo {
+  width: 500px;
+  height: auto;
+  margin-bottom: 1rem;
 }
 
-/* Subtítulo */
 .tagline {
   color: #555;
   margin-bottom: 1.5rem;
   font-size: 1.1rem;
 }
 
-/* Botones de links */
 .links a {
   display: block;
   margin: 0.5rem auto;
   padding: 0.6rem 1.2rem;
   background: #000;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 999px;
   text-decoration: none;
   width: fit-content;
   transition: all 0.3s ease;
 }
 
-/* Hover con efecto suave */
 .links a:hover {
-  background: #1db954;
+  background: #ff8c00;
   color: #000;
+}
+
+.chars {
+  margin-top: 3rem;
+  max-width: 500px;
+  height: auto;
+}
+
+.mic-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;  
+  z-index: 5;
+  opacity: 0;               
+  transition: opacity 0.25s ease-out;
+}
+
+.mic-cable {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cable-pixel {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #111;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.mic {
+  position: fixed;
+  width: 120px;
+  height: auto;
+  pointer-events: auto;    
+  cursor: grab;
+  user-select: none;
+  -webkit-user-drag: none;
+  z-index: 10;
+  opacity: 0;     
+  image-rendering: pixelated;
 }

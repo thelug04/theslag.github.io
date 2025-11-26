@@ -1,35 +1,160 @@
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+const micLayer = document.querySelector('.mic-layer');
+const micCable = document.querySelector('.mic-cable');
+const mic = document.querySelector('.mic');
 
-const stars = Array.from({ length: 100 }, () => ({
-  x: Math.random() * innerWidth,
-  y: Math.random() * innerHeight,
-  r: Math.random() * 2,
-  d: Math.random() * 1
-}));
 
-function draw() {
-  ctx.clearRect(0, 0, innerWidth, innerHeight);
-  ctx.fillStyle = "white";
-  stars.forEach(s => {
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
+let angle = 0;          
+let angVel = 0;      
+let angAcc = 0;     
+
+const damping = 0.995;
+const gravity = 0.0025;
+const maxAngle = Math.PI / 3; 
+
+let ropeLength = 0;
+const minRope = 60;
+const maxRope = 440;
+
+let isDragging = false;
+
+const PIXEL = 4;
+
+
+function getAnchor() {
+  return {
+    x: window.innerWidth / 2,
+    y: 0
+  };
 }
 
-function update() {
-  stars.forEach(s => {
-    s.y += s.d;
-    if (s.y > innerHeight) s.y = 0;
-  });
+function updateFromScroll() {
+  const scrollY = window.scrollY;
+
+  ropeLength = Math.min(scrollY, maxRope);
+
+  const opacity = Math.max(0, Math.min(1, (ropeLength - 20) / 80));
+  micLayer.style.opacity = opacity;
+  mic.style.opacity = opacity;
+}
+
+function render() {
+  const anchor = getAnchor();
+
+  let ax = Math.round(anchor.x / PIXEL) * PIXEL;
+  let ay = Math.round(anchor.y / PIXEL) * PIXEL;
+
+  if (angle > maxAngle) angle = maxAngle;
+  if (angle < -maxAngle) angle = -maxAngle;
+
+  if (ropeLength < 5) {
+    micCable.innerHTML = '';
+    mic.style.transform = 'translate(-9999px, -9999px)';
+    return;
+  }
+
+  const L = Math.max(ropeLength, minRope);
+
+  let micXf = ax + L * Math.sin(angle);
+  let micYf = ay + L * Math.cos(angle);
+
+  let micX = Math.round(micXf / PIXEL) * PIXEL;
+  let micY = Math.round(micYf / PIXEL) * PIXEL;
+
+  const micWidth = mic.offsetWidth || 120;
+  const micHeight = mic.offsetHeight || 120;
+  const micTx = micX - Math.round(micWidth / 2);
+  const micTy = micY - Math.round(micHeight / 2);
+
+  mic.style.transform = `translate(${micTx}px, ${micTy}px)`;
+
+  micCable.innerHTML = ''; 
+
+  const dx = micX - ax;
+  const dy = micY - ay;
+  const length = Math.hypot(dx, dy);
+
+  if (length < PIXEL) return;
+
+  const steps = Math.max(1, Math.floor(length / PIXEL));
+
+  const ux = (dx / length) * PIXEL;
+  const uy = (dy / length) * PIXEL;
+
+  let x = ax;
+  let y = ay;
+
+  for (let i = 0; i <= steps; i++) {
+    const pxX = Math.round(x / PIXEL) * PIXEL;
+    const pxY = Math.round(y / PIXEL) * PIXEL;
+
+    const px = document.createElement('div');
+    px.className = 'cable-pixel';
+    px.style.left = (pxX - PIXEL / 2) + 'px';
+    px.style.top = (pxY - PIXEL / 2) + 'px';
+
+    micCable.appendChild(px);
+
+    x += ux;
+    y += uy;
+  }
 }
 
 function animate() {
-  draw();
-  update();
+  if (!isDragging && ropeLength > 20) {
+    angAcc = -gravity * Math.sin(angle);
+    angVel += angAcc;
+    angVel *= damping;
+    angle += angVel;
+  }
+
+  render();
   requestAnimationFrame(animate);
 }
-animate();
+
+
+mic.addEventListener('dragstart', (e) => e.preventDefault());
+
+mic.addEventListener('mousedown', (e) => {
+  if (parseFloat(mic.style.opacity) < 0.05) return;
+  e.preventDefault();
+  isDragging = true;
+  mic.style.cursor = 'grabbing';
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+
+  const anchor = getAnchor();
+
+  const dx = e.clientX - anchor.x;
+  const dy = e.clientY - anchor.y;
+
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  ropeLength = Math.max(minRope, Math.min(dist, maxRope));
+
+  angle = Math.atan2(dx, dy);
+  angVel = 0;
+
+  render();
+});
+
+window.addEventListener('mouseup', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  mic.style.cursor = 'grab';
+});
+
+window.addEventListener('resize', () => {
+  render();
+});
+
+window.addEventListener('scroll', () => {
+  updateFromScroll();
+  render();
+});
+
+window.addEventListener('load', () => {
+  updateFromScroll();
+  render();
+  animate();
+});
