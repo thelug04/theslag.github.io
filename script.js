@@ -208,6 +208,7 @@ function showPeekerOnce() {
   void peeker.offsetWidth;
 
   peeker.style.transition = "opacity 0.35s ease, transform 0.35s ease";
+
   setTimeout(() => {
     if (side === 0)
       peeker.style.transform = "translateX(-20%) rotate(90deg)";
@@ -241,12 +242,17 @@ function schedulePeeker() {
   }, delay);
 }
 
-peeker.addEventListener("click", () => {
+function handlePeekerPress(e) {
+  e.preventDefault();
   const s = new Audio("sounds/ccrm.mp3");
   s.play();
-});
+}
 
-peeker.addEventListener("touchstart", () => {
-  const s = new Audio("sounds/ccrm.mp3");
-  s.play();
-});
+const hasTouch =
+  "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+
+if (hasTouch) {
+  peeker.addEventListener("touchstart", handlePeekerPress, { passive: false });
+} else {
+  peeker.addEventListener("click", handlePeekerPress);
+}
