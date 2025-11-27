@@ -13,7 +13,7 @@ const maxAngle = Math.PI / 3;
 
 let ropeLength = 0;
 const minRope = 60;
-const maxRope = 440;
+const maxRope = 470;
 
 let isDragging = false;
 
