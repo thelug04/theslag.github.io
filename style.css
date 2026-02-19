@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
   margin: 0;
   background: #ffffff;
   color: #000000;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
   overflow-x: hidden;
 }
 
@@ -34,20 +39,71 @@ body {
 }
 
 .links a {
+  --hover-bg: #000000;
+  --hover-border: #000000;
+  --hover-shadow: #000000;
+  --hover-text: #111111;
   display: block;
   margin: 0.5rem auto;
-  padding: 0.6rem 1.2rem;
-  background: #000;
+  padding: 0.85rem 1.1rem;
+  background: #000000;
   color: #fff;
-  border-radius: 999px;
+  border: 3px solid #000000;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 #000000;
+  font-size: clamp(10px, 2.2vw, 13px);
+  line-height: 1.4;
   text-decoration: none;
   width: fit-content;
-  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.links a:hover {
-  background: #ff8c00;
-  color: #000;
+.links a.link-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.links a:hover,
+.links a:active {
+  background: var(--hover-bg);
+  border-color: var(--hover-border);
+  color: var(--hover-text);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--hover-shadow);
+}
+
+.links a[href*="spotify.com"] {
+  --hover-bg: #98d5a5;
+  --hover-border: #65a676;
+  --hover-shadow: #4a7b57;
+}
+
+.links a[href*="music.apple.com"] {
+  --hover-bg: #ebb0b8;
+  --hover-border: #be7f89;
+  --hover-shadow: #8c5d65;
+}
+
+.links a[href*="youtube.com"] {
+  --hover-bg: #e6a0a0;
+  --hover-border: #b57474;
+  --hover-shadow: #865454;
+}
+
+.links a[href*="instagram.com"] {
+  --hover-bg: #deb0d3;
+  --hover-border: #ad7fa3;
+  --hover-shadow: #7f5c78;
+}
+
+.links a[href*="tiktok.com"] {
+  --hover-bg: #a4dada;
+  --hover-border: #75aaaa;
+  --hover-shadow: #547d7d;
 }
 
 .chars {
@@ -99,6 +155,11 @@ body {
   image-rendering: pixelated;
 }
 @media (max-width: 768px) {
+  body {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
   .page {
     padding-top: 60px;
   }
@@ -108,8 +169,10 @@ body {
   }
 
   .links a {
-    width: 80vw;
+    width: 88vw;
     max-width: 320px;
+    padding: 1rem 0.75rem;
+    font-size: 11px;
   }
 
   .chars {

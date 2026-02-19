@@ -2,6 +2,7 @@ const micLayer = document.querySelector('.mic-layer');
 const micCable = document.querySelector('.mic-cable');
 const mic = document.querySelector('.mic');
 const peeker = document.querySelector('.peeker');
+const socialLinks = document.querySelectorAll('.links a');
 
 let angle = 0;
 let angVel = 0;
@@ -155,8 +156,37 @@ window.addEventListener("load", () => {
   updateFromScroll();
   render();
   animate();
+  setupScrollRevealLinks();
   schedulePeeker();
 });
+
+function setupScrollRevealLinks() {
+  if (!socialLinks.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        const link = entry.target;
+        const index = Array.from(socialLinks).indexOf(link);
+        const delay = index * 140;
+
+        setTimeout(() => {
+          link.classList.add("link-visible");
+        }, delay);
+
+        observer.unobserve(link);
+      });
+    },
+    {
+      threshold: 0.25,
+      rootMargin: "0px 0px -10% 0px"
+    }
+  );
+
+  socialLinks.forEach((link) => observer.observe(link));
+}
 
 function randomBetween(min, max) {
   return Math.random() * (max - min) + min;
