@@ -1,8 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+:root {
+  --bg-base: #f8f6ef;
+  --focus-color: #ffe082;
+}
+
 body {
   margin: 0;
-  background: #ffffff;
+  position: relative;
+  background: var(--bg-base);
   color: #000000;
   font-family: 'Press Start 2P', monospace;
   font-size: 14px;
@@ -12,6 +18,8 @@ body {
 }
 
 .page {
+  position: relative;
+  z-index: 2;
   min-height: 150vh;
   display: flex;
   flex-direction: column;
@@ -25,11 +33,48 @@ body {
   z-index: 1;
 }
 
+.intro-block {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+body.page-loaded .intro-block {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .logo {
   width: 500px;
   max-width: 90vw;
   height: auto;
   margin-bottom: 1rem;
+}
+
+.logo-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+img[src$=".gif"],
+img[src$=".GIF"] {
+  filter: saturate(1.22);
+}
+
+img[src*="justme.gif"],
+img[src*="justme.GIF"] {
+  filter: saturate(1.22);
+}
+
+.intro-logo {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  transition: opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s;
+}
+
+body.page-loaded .intro-logo {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .tagline {
@@ -43,7 +88,9 @@ body {
   --hover-border: #000000;
   --hover-shadow: #000000;
   --hover-text: #111111;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0.5rem auto;
   padding: 0.85rem 1.1rem;
   background: #000000;
@@ -74,6 +121,11 @@ body {
   color: var(--hover-text);
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--hover-shadow);
+}
+
+.links a:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 3px;
 }
 
 .links a[href*="spotify.com"] {
@@ -110,6 +162,48 @@ body {
   margin-top: 3rem;
   max-width: 15vw;
   height: auto;
+}
+
+.intro-chars {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease 0.45s, transform 0.7s ease 0.45s;
+}
+
+body.page-loaded .intro-chars {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sound-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 30;
+  font-family: inherit;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  border: 3px solid #000;
+  background: #000;
+  color: #fff;
+  border-radius: 0;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #000;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease, color 0.12s ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #000;
+  background: #f7d18f;
+  color: #000;
+}
+
+.sound-toggle:focus-visible {
+  outline: 3px solid var(--focus-color);
+  outline-offset: 2px;
 }
 
 .mic-layer {
@@ -157,7 +251,7 @@ body {
 @media (max-width: 768px) {
   body {
     font-size: 12px;
-    line-height: 1.8;
+    line-height: 1.75;
   }
 
   .page {
@@ -169,14 +263,21 @@ body {
   }
 
   .links a {
-    width: 88vw;
-    max-width: 320px;
-    padding: 1rem 0.75rem;
+    width: min(90vw, 360px);
+    min-height: 52px;
+    padding: 0.95rem 0.7rem;
     font-size: 11px;
   }
 
   .chars {
     max-width: 80vw;
+  }
+
+  .sound-toggle {
+    font-size: 9px;
+    top: 10px;
+    right: 10px;
+    padding: 0.45rem 0.5rem;
   }
 }
 .peeker {
@@ -189,4 +290,21 @@ body {
   z-index: 20;
   transition: opacity 0.35s ease, transform 0.35s ease;
   image-rendering: pixelated;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-block,
+  .intro-logo,
+  .intro-chars,
+  .links a,
+  .sound-toggle,
+  .peeker,
+  .mic-layer {
+    transition: none;
+  }
+
+  .intro-logo,
+  .intro-logo {
+    animation: none;
+  }
 }

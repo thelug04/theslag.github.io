@@ -7,27 +7,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button class="sound-toggle" type="button" aria-pressed="true" aria-label="Desactivar sonidos">SOUND: ON</button>
 
   <div class="mic-layer">
     <div class="mic-cable"></div>
   </div>
 
-  <img src="assets/micro.png" alt="Micrófono colgante" class="mic">
-  <img src="assets/ccrm.png" alt="Personaje" class="peeker">
+  <img src="assets/micro.png" alt="Micrófono colgante" class="mic" decoding="async">
+  <img src="assets/ccrm.png" alt="Personaje" class="peeker" loading="lazy" decoding="async">
   <div class="page">
-    <div class="container">
-      <img src="assets/justme.PNG" alt="Theslag logo" class="logo">
+    <div class="container intro-block">
+      <div class="logo-wrap intro-logo-wrap">
+        <img src="assets/justme.gif" alt="Theslag logo" class="logo intro-logo" decoding="async">
+      </div>
 
-      <div class="links">
-        <a href="https://open.spotify.com/intl-es/artist/02Vbw2pFNKGIJ1gpcqabPl?si=Kc6pDEcvRVur2PatiIu5Bg" target="_blank">Spotify</a>
-        <a href="https://music.apple.com/cl/artist/theslag/1496319778" target="_blank">Apple Music</a>
-        <a href="https://www.youtube.com/@theslag9213" target="_blank">YouTube</a>
-        <a href="https://www.instagram.com/theslag_2/" target="_blank">Instagram</a>
-        <a href="https://www.tiktok.com/@theslag" target="_blank">TikTok</a>
+      <div class="links intro-links">
+        <a href="https://open.spotify.com/intl-es/artist/02Vbw2pFNKGIJ1gpcqabPl?si=Kc6pDEcvRVur2PatiIu5Bg" target="_blank" rel="noopener noreferrer">
+          Spotify
+        </a>
+        <a href="https://music.apple.com/cl/artist/theslag/1496319778" target="_blank" rel="noopener noreferrer">
+          Apple Music
+        </a>
+        <a href="https://www.youtube.com/@theslag9213" target="_blank" rel="noopener noreferrer">
+          YouTube
+        </a>
+        <a href="https://www.instagram.com/theslag_2/" target="_blank" rel="noopener noreferrer">
+          Instagram
+        </a>
+        <a href="https://www.tiktok.com/@theslag" target="_blank" rel="noopener noreferrer">
+          TikTok
+        </a>
       </div>
     </div>
 
-    <img src="assets/animados.gif" class="chars" alt="personajes animados">
+    <img src="assets/animados.gif" class="chars intro-chars" alt="personajes animados" loading="lazy" decoding="async">
   </div>
 
   <script src="script.js"></script>

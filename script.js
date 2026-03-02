@@ -3,6 +3,7 @@ const micCable = document.querySelector('.mic-cable');
 const mic = document.querySelector('.mic');
 const peeker = document.querySelector('.peeker');
 const socialLinks = document.querySelectorAll('.links a');
+const soundToggle = document.querySelector('.sound-toggle');
 
 let angle = 0;
 let angVel = 0;
@@ -19,6 +20,59 @@ const maxRope = 470;
 let isDragging = false;
 
 const PIXEL = 4;
+const SOUND_STORAGE_KEY = "theslag_sound_enabled";
+
+let soundEnabled = true;
+let audioContext;
+
+function initSoundState() {
+  const stored = localStorage.getItem(SOUND_STORAGE_KEY);
+  soundEnabled = stored !== "0";
+  renderSoundToggle();
+}
+
+function renderSoundToggle() {
+  if (!soundToggle) return;
+  soundToggle.textContent = soundEnabled ? "SOUND: ON" : "SOUND: OFF";
+  soundToggle.setAttribute("aria-pressed", String(soundEnabled));
+  soundToggle.setAttribute("aria-label", soundEnabled ? "Desactivar sonidos" : "Activar sonidos");
+}
+
+function getAudioContext() {
+  if (!audioContext) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    audioContext = new Ctx();
+  }
+  return audioContext;
+}
+
+function playUiBlip(type = "hover") {
+  if (!soundEnabled) return;
+
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  if (ctx.state === "suspended") {
+    ctx.resume();
+  }
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const now = ctx.currentTime;
+  const frequency = type === "click" ? 330 : 470;
+
+  osc.type = "square";
+  osc.frequency.setValueAtTime(frequency, now);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.07, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + (type === "click" ? 0.11 : 0.07));
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + (type === "click" ? 0.12 : 0.08));
+}
 
 function getAnchor() {
   return {
@@ -153,10 +207,13 @@ window.addEventListener("scroll", () => {
 });
 
 window.addEventListener("load", () => {
+  document.body.classList.add("page-loaded");
+  initSoundState();
   updateFromScroll();
   render();
   animate();
   setupScrollRevealLinks();
+  bindUiSounds();
   schedulePeeker();
 });
 
@@ -169,7 +226,7 @@ function setupScrollRevealLinks() {
         if (!entry.isIntersecting) return;
 
         const link = entry.target;
-        const index = Array.from(socialLinks).indexOf(link);
+        const index = Number(link.dataset.index || 0);
         const delay = index * 140;
 
         setTimeout(() => {
@@ -185,7 +242,26 @@ function setupScrollRevealLinks() {
     }
   );
 
-  socialLinks.forEach((link) => observer.observe(link));
+  socialLinks.forEach((link, index) => {
+    link.dataset.index = String(index);
+    observer.observe(link);
+  });
+}
+
+function bindUiSounds() {
+  socialLinks.forEach((link) => {
+    link.addEventListener("mouseenter", () => playUiBlip("hover"));
+    link.addEventListener("click", () => playUiBlip("click"));
+    link.addEventListener("touchstart", () => playUiBlip("click"), { passive: true });
+  });
+
+  if (!soundToggle) return;
+  soundToggle.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    localStorage.setItem(SOUND_STORAGE_KEY, soundEnabled ? "1" : "0");
+    renderSoundToggle();
+    if (soundEnabled) playUiBlip("click");
+  });
 }
 
 function randomBetween(min, max) {
@@ -282,7 +358,7 @@ const hasTouch =
   "ontouchstart" in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 
 if (hasTouch) {
-  peeker.addEventListener("touchstart", handlePeekerPress, { passive: false });
+  if (peeker) peeker.addEventListener("touchstart", handlePeekerPress, { passive: false });
 } else {
-  peeker.addEventListener("click", handlePeekerPress);
+  if (peeker) peeker.addEventListener("click", handlePeekerPress);
 }
