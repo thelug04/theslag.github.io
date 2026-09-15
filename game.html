@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theslag Runner | Juego</title>
+  <link rel="icon" type="image/png" href="assets/justme.PNG">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="game-body">
+  <main class="game-screen">
+    <nav class="game-nav" aria-label="Principal">
+      <a href="index.html" class="pixel-button pixel-button-small">Inicio</a>
+    </nav>
+
+    <section class="game-stage" aria-labelledby="game-title">
+
+
+      <div class="game-panel">
+        <div class="game-hud" aria-label="Marcador">
+          <div class="score-pill">
+            <span>Score</span>
+            <strong id="score-value">00000</strong>
+          </div>
+          <div class="score-pill">
+            <span>Best</span>
+            <strong id="best-value">00000</strong>
+          </div>
+          <div class="score-pill">
+            <span>CDS</span>
+            <strong id="cds-value">0/5</strong>
+          </div>
+          <button class="icon-button" id="sound-button" type="button" aria-label="Silenciar sonido" aria-pressed="true" title="Sonido">SFX</button>
+          <button class="icon-button" id="pause-button" type="button" aria-label="Pausar" title="Pausar">II</button>
+        </div>
+
+        <div class="runner-frame">
+          <canvas id="runner-canvas" width="960" height="360" aria-label="Theslag Runner"></canvas>
+          <div class="game-overlay" id="game-overlay">
+            <p id="game-state-label">READY</p>
+            <button class="pixel-button" id="start-button" type="button">Jugar</button>
+          </div>
+        </div>
+
+        <div class="touch-controls" aria-label="Controles táctiles">
+          <button class="control-button" id="jump-button" type="button" aria-label="Saltar" title="Saltar">&#9650;</button>
+          <button class="control-button" id="duck-button" type="button" aria-label="Agacharse" title="Agacharse">&#9660;</button>
+        </div>
+
+      </div>
+
+      <section class="music-unlock is-locked" id="music-unlock" aria-live="polite">
+        <div class="music-unlock-copy">
+          <span id="music-status">Consigue los cds para desbloquear</span>
+          <strong>Just Me</strong>
+        </div>
+        <div class="pixel-audio-player" id="pixel-audio-player" aria-label="Reproductor de Just Me" aria-disabled="true">
+          <audio id="album-player" preload="none">
+            <source src="sounds/Just%20Me%20Master%2044.1.wav" type="audio/wav">
+          </audio>
+          <button class="music-play-button" id="music-play-button" type="button" aria-label="Reproducir Just Me" disabled>&gt;</button>
+          <input class="music-seek" id="music-seek" type="range" min="0" max="100" step="0.1" value="0" aria-label="Avance de la cancion" disabled>
+          <span class="music-time" id="music-time">0:00 / 0:00</span>
+        </div>
+      </section>
+
+      <p class="sr-only" id="game-controls">
+        Usa espacio, flecha arriba o tocar la pantalla para saltar. Usa flecha abajo para agacharte.
+      </p>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
