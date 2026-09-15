@@ -783,7 +783,10 @@ body.page-loaded .intro-chars {
 
   .touch-controls {
     display: flex;
+    justify-content: space-between;
     gap: 12px;
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .music-unlock {
