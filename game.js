@@ -1105,7 +1105,17 @@ function handleKeyUp(event) {
   }
 }
 
+function cancelControlEvent(event) {
+  event.preventDefault();
+}
+
 function bindHoldButton(button, onPress, onRelease) {
+  button.addEventListener("contextmenu", cancelControlEvent);
+  button.addEventListener("dragstart", cancelControlEvent);
+  button.addEventListener("selectstart", cancelControlEvent);
+  button.addEventListener("touchstart", cancelControlEvent, { passive: false });
+  button.addEventListener("touchmove", cancelControlEvent, { passive: false });
+
   button.addEventListener("pointerdown", (event) => {
     event.preventDefault();
     button.setPointerCapture(event.pointerId);

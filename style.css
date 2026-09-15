@@ -698,6 +698,10 @@ body.page-loaded .intro-chars {
   font-size: 22px;
   line-height: 1;
   touch-action: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
 .sr-only {
